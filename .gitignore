@@ -1,0 +1,28 @@
+# API keys and secrets
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+.streamlit/secrets.toml.py
+.streamlit.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local documents already indexed in Pinecone
+company_docs/

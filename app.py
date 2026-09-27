@@ -561,6 +561,13 @@ Answer: """
     return response.content, sources
 
 
+@st.cache_data(ttl=3600, show_spinner=False)
+def cached_answer(question, top_k):
+    """Reuse an identical question for one hour to reduce repeated API usage."""
+    vectorstore, llm = load_rag()
+    return get_answer(vectorstore, llm, question, top_k)
+
+
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown(f"""
@@ -671,7 +678,7 @@ for i, q in enumerate(sample_qs):
         if st.button(q, key=f"sample_{i}", use_container_width=True):
             st.session_state.messages.append({"role": "user", "content": q})
             with st.spinner("Thinking..."):
-                answer, sources = get_answer(vectorstore, llm, q, top_k=st.session_state.top_k)
+                answer, sources = cached_answer(q, st.session_state.top_k)
             st.session_state.messages.append({
                 "role": "assistant",
                 "content": answer,
@@ -707,7 +714,7 @@ if question := st.chat_input("Ask about your company documents..."):
 
     with st.chat_message("assistant"):
         with st.spinner("Searching documents..."):
-            answer, sources = get_answer(vectorstore, llm, question, top_k=st.session_state.top_k)
+            answer, sources = cached_answer(question, st.session_state.top_k)
         st.markdown(answer)
         if sources:
             with st.expander(f"📎 Sources used ({len(sources)})"):

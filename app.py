@@ -104,7 +104,8 @@ html, body, .stApp {{
     color: {TEXT_PRIMARY};
 }}
 
-#MainMenu, footer, header {{ visibility: hidden; }}
+# Keep the header visible: Streamlit places the sidebar toggle there.
+#MainMenu, footer {{ visibility: hidden; }}
 
 /* ── Ambient glow orb ── */
 .stApp::before {{
@@ -125,6 +126,10 @@ html, body, .stApp {{
     background: {SIDEBAR_BG};
     border-right: 1px solid {BORDER};
     padding: 1.5rem 1rem;
+}}
+[data-testid="stSidebar"] {{
+    display: block !important;
+    visibility: visible !important;
 }}
 [data-testid="stSidebar"] * {{ color: {TEXT_PRIMARY}; }}
 
@@ -719,4 +724,3 @@ if question := st.chat_input("Ask about your company documents..."):
         "content": answer,
         "sources": sources,
     })
-
